@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const connectDB = async ():Promise<void> => {
+export const conectarDB = async ():Promise<void> => {
     try {
         await mongoose.connect('mongodb+srv://jbminutillo:aAbEGoFvs8lwdWCV@cluster0.2kgkwla.mongodb.net/')
         console.log('base de datos')

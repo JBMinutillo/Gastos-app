@@ -15,10 +15,10 @@ export const getGastos = async({}, res: Response) => {
     
 }
 
-export const getGastosByCategory  = async(req:Request, res: Response) => {
-    const {category} = req.params;
+export const getGastosByid  = async(req:Request, res: Response) => {
+    const {id} = req.params;
      
-    const gastoSaved : IGastos | null  = await Gastos.findOne({category:category});
+    const gastoSaved : IGastos | null  = await Gastos.findOne({id:id});
 
     res.json({gastoSaved});
 
@@ -45,30 +45,33 @@ export const createGasto = async(req:Request, res: Response) => {
     
 }
 
-export const updateGasto = async(req:Request, res: Response) => {
-    const {id} = req.params;
-    const gastoData : IGastos = req.body;
-    const gasto = await Gastos.findByIdAndUpdate(id, gastoData, {new:true});
+export const updateGasto = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const {...data} = req.body;
+
+    const gastos = await Gastos.findOneAndUpdate({id: id}, data);
 
     res.json({
-        message: "Gasto actualizado",
-        gasto
-        });
-    
-    console.log("Gasto actualizado");
-
-}
+        gastos
+    })
+};
 
 
 export const deleteGastos = async(req:Request, res: Response) => {
-    const {id} = req.params;
-    const gasto = await Gastos.findByIdAndUpdate(id, {state:false}, {new:true});
+    const { id } = req.params;
+
+    const gastos = await Gastos.findOneAndDelete({id:id});
+
+    if(!gastos) {
+        res.json({
+            msg: "El gasto no fue enocntrado en la DB"
+        })
+        return
+    }
 
     res.json({
-        message: "Gasto eliminado",
-        gasto
-        });
-
-    console.log("Gasto eliminado");
+        gastos
+    })
     
 }
